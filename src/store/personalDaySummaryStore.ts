@@ -1,15 +1,16 @@
-import { create } from 'zustand';
+import create from 'zustand';
+import axios from 'axios';
 
-interface PersonalDaySummaryState {
-  totalsByDate: Record<string, number>;
-  setTotalForDate: (date: string, total: number) => void;
-}
-
-export const usePersonalDaySummaryStore = create<PersonalDaySummaryState>((set) => ({
-  totalsByDate: {},
-  setTotalForDate: (date, total) =>
-    set((state) => ({
-      totalsByDate: { ...state.totalsByDate, [date]: total }
-    }))
+const useStore = create((set) => ({
+    expenses: [],
+    fetchExpenses: async () => {
+        const response = await axios.get('/api/expenses');
+        set({ expenses: response.data });
+    },
+    deleteExpense: async (id) => {
+        await axios.delete(`/api/expenses/${id}`);
+        set((state) => ({ expenses: state.expenses.filter(expense => expense.id !== id) }));
+    },
 }));
 
+export { useStore };
