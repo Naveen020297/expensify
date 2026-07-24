@@ -1,27 +1,12 @@
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_BASE_URL = 'http://localhost:3000'; // Backend port
+const API_URL = 'http://your-api-url/api/expenses';
 
-export const apiClient = axios.create({
-    baseURL: API_BASE_URL,
-    headers: {
-        'Content-Type': 'application/json',
-    },
-});
+export const fetchExpenses = async () => {
+    const response = await axios.get(API_URL);
+    return response.data;
+};
 
-const STORAGE_KEY = 'expensify_auth';
-
-apiClient.interceptors.request.use(
-    async (config) => {
-        const stored = await AsyncStorage.getItem(STORAGE_KEY);
-        if (stored) {
-            const { token } = JSON.parse(stored);
-            if (token) {
-                config.headers.Authorization = `Bearer ${token}`;
-            }
-        }
-        return config;
-    },
-    (error) => Promise.reject(error)
-);
+export const addExpense = async (expense) => {
+    await axios.post(API_URL, expense);
+};
