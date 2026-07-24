@@ -1,15 +1,12 @@
-import { create } from 'zustand';
+import create from 'zustand';
+import { deleteExpense as apiDeleteExpense } from '../services/apiClient';
 
-interface PersonalDaySummaryState {
-  totalsByDate: Record<string, number>;
-  setTotalForDate: (date: string, total: number) => void;
-}
-
-export const usePersonalDaySummaryStore = create<PersonalDaySummaryState>((set) => ({
-  totalsByDate: {},
-  setTotalForDate: (date, total) =>
-    set((state) => ({
-      totalsByDate: { ...state.totalsByDate, [date]: total }
-    }))
+const useStore = create(set => ({
+    expenses: [],
+    deleteExpense: async (id) => {
+        await apiDeleteExpense(id);
+        set(state => ({ expenses: state.expenses.filter(expense => expense.id !== id) }));
+    },
 }));
 
+export default useStore;
