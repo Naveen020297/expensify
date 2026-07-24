@@ -1,27 +1,24 @@
+// This file contains API client functions to interact with the backend
+
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_BASE_URL = 'http://localhost:3000'; // Backend port
+const API_URL = 'http://your-api-url.com/api';
 
-export const apiClient = axios.create({
-    baseURL: API_BASE_URL,
-    headers: {
-        'Content-Type': 'application/json',
-    },
-});
+export const createExpense = async (expense) => {
+    const response = await axios.post(`${API_URL}/expenses`, expense);
+    return response.data;
+};
 
-const STORAGE_KEY = 'expensify_auth';
+export const getExpenses = async () => {
+    const response = await axios.get(`${API_URL}/expenses`);
+    return response.data;
+};
 
-apiClient.interceptors.request.use(
-    async (config) => {
-        const stored = await AsyncStorage.getItem(STORAGE_KEY);
-        if (stored) {
-            const { token } = JSON.parse(stored);
-            if (token) {
-                config.headers.Authorization = `Bearer ${token}`;
-            }
-        }
-        return config;
-    },
-    (error) => Promise.reject(error)
-);
+export const updateExpense = async (id, expense) => {
+    const response = await axios.put(`${API_URL}/expenses/${id}`, expense);
+    return response.data;
+};
+
+export const deleteExpense = async (id) => {
+    await axios.delete(`${API_URL}/expenses/${id}`);
+};
