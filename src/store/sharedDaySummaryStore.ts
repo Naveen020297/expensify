@@ -1,20 +1,11 @@
-import { create } from 'zustand';
+import create from 'zustand';
 
-interface SharedDaySummaryState {
-  totalsByGroupAndDate: Record<string, number>;
-  setTotalForGroupAndDate: (groupId: string, date: string, total: number) => void;
-}
-
-const makeKey = (groupId: string, date: string) => `${groupId}:${date}`;
-
-export const useSharedDaySummaryStore = create<SharedDaySummaryState>((set) => ({
-  totalsByGroupAndDate: {},
-  setTotalForGroupAndDate: (groupId, date, total) =>
-    set((state) => ({
-      totalsByGroupAndDate: {
-        ...state.totalsByGroupAndDate,
-        [makeKey(groupId, date)]: total
-      }
+const useSharedDaySummaryStore = create(set => ({
+    expenses: [],
+    setExpenses: (expenses) => set({ expenses }),
+    updateExpense: (id, updatedExpense) => set(state => ({
+        expenses: state.expenses.map(expense => (expense.id === id ? updatedExpense : expense))
     }))
 }));
 
+export default useSharedDaySummaryStore;
