@@ -1,27 +1,27 @@
+// Updated API client to include expense tracking endpoints
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_BASE_URL = 'http://localhost:3000'; // Backend port
-
-export const apiClient = axios.create({
-    baseURL: API_BASE_URL,
+const apiClient = axios.create({
+    baseURL: 'https://api.example.com',
     headers: {
         'Content-Type': 'application/json',
     },
 });
 
-const STORAGE_KEY = 'expensify_auth';
+export const createExpense = async (expense) => {
+    return await apiClient.post('/api/expenses', expense);
+};
 
-apiClient.interceptors.request.use(
-    async (config) => {
-        const stored = await AsyncStorage.getItem(STORAGE_KEY);
-        if (stored) {
-            const { token } = JSON.parse(stored);
-            if (token) {
-                config.headers.Authorization = `Bearer ${token}`;
-            }
-        }
-        return config;
-    },
-    (error) => Promise.reject(error)
-);
+export const getExpenses = async () => {
+    return await apiClient.get('/api/expenses');
+};
+
+export const updateExpense = async (id, expense) => {
+    return await apiClient.put(`/api/expenses/${id}`, expense);
+};
+
+export const deleteExpense = async (id) => {
+    return await apiClient.delete(`/api/expenses/${id}`);
+};
+
+export default apiClient;
