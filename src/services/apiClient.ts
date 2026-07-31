@@ -1,27 +1,26 @@
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// Existing code...
 
-const API_BASE_URL = 'http://localhost:3000'; // Backend port
+// Import the logging library
+const logger = require('your-logging-library');
 
-export const apiClient = axios.create({
-    baseURL: API_BASE_URL,
-    headers: {
-        'Content-Type': 'application/json',
-    },
-});
-
-const STORAGE_KEY = 'expensify_auth';
-
-apiClient.interceptors.request.use(
-    async (config) => {
-        const stored = await AsyncStorage.getItem(STORAGE_KEY);
-        if (stored) {
-            const { token } = JSON.parse(stored);
-            if (token) {
-                config.headers.Authorization = `Bearer ${token}`;
-            }
+// Error logging middleware
+function errorLoggingMiddleware(err, req, res, next) {
+    logger.error({
+        timestamp: new Date().toISOString(),
+        message: err.message,
+        stack: err.stack,
+        request: {
+            method: req.method,
+            url: req.originalUrl,
+            body: req.body,
+            params: req.params,
+            query: req.query
         }
-        return config;
-    },
-    (error) => Promise.reject(error)
-);
+    });
+    next(err);
+}
+
+// Apply the middleware to your API routes
+app.use(errorLoggingMiddleware);
+
+// Existing code...
