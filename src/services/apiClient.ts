@@ -1,27 +1,22 @@
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// Import necessary logging library
+import logger from '../utils/logger';
 
-const API_BASE_URL = 'http://localhost:3000'; // Backend port
-
-export const apiClient = axios.create({
-    baseURL: API_BASE_URL,
-    headers: {
-        'Content-Type': 'application/json',
-    },
-});
-
-const STORAGE_KEY = 'expensify_auth';
-
-apiClient.interceptors.request.use(
-    async (config) => {
-        const stored = await AsyncStorage.getItem(STORAGE_KEY);
-        if (stored) {
-            const { token } = JSON.parse(stored);
-            if (token) {
-                config.headers.Authorization = `Bearer ${token}`;
-            }
+// Example function to demonstrate error logging
+export const apiCall = async (url, options) => {
+    try {
+        const response = await fetch(url, options);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-        return config;
-    },
-    (error) => Promise.reject(error)
-);
+        return await response.json();
+    } catch (error) {
+        // Log the error details
+        logger.error({
+            message: error.message,
+            stack: error.stack,
+            url,
+            options
+        });
+        throw error;
+    }
+};
