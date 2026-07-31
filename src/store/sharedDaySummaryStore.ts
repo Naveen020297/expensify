@@ -1,20 +1,16 @@
-import { create } from 'zustand';
+// Import the logging library if available
+import logger from 'your-logging-library';
 
-interface SharedDaySummaryState {
-  totalsByGroupAndDate: Record<string, number>;
-  setTotalForGroupAndDate: (groupId: string, date: string, total: number) => void;
+// Example function to fetch shared day summary
+async function fetchSharedDaySummary() {
+    try {
+        const response = await apiRequest('/shared-day-summary');
+        return await response.json();
+    } catch (error) {
+        // Log error fetching shared day summary
+        logger.error('Failed to fetch shared day summary', { error });
+        throw error;
+    }
 }
 
-const makeKey = (groupId: string, date: string) => `${groupId}:${date}`;
-
-export const useSharedDaySummaryStore = create<SharedDaySummaryState>((set) => ({
-  totalsByGroupAndDate: {},
-  setTotalForGroupAndDate: (groupId, date, total) =>
-    set((state) => ({
-      totalsByGroupAndDate: {
-        ...state.totalsByGroupAndDate,
-        [makeKey(groupId, date)]: total
-      }
-    }))
-}));
-
+export { fetchSharedDaySummary };

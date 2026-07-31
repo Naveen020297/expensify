@@ -1,15 +1,16 @@
-import { create } from 'zustand';
+// Import the logging library if available
+import logger from 'your-logging-library';
 
-interface PersonalDaySummaryState {
-  totalsByDate: Record<string, number>;
-  setTotalForDate: (date: string, total: number) => void;
+// Example function to fetch personal day summary
+async function fetchPersonalDaySummary() {
+    try {
+        const response = await apiRequest('/personal-day-summary');
+        return await response.json();
+    } catch (error) {
+        // Log error fetching personal day summary
+        logger.error('Failed to fetch personal day summary', { error });
+        throw error;
+    }
 }
 
-export const usePersonalDaySummaryStore = create<PersonalDaySummaryState>((set) => ({
-  totalsByDate: {},
-  setTotalForDate: (date, total) =>
-    set((state) => ({
-      totalsByDate: { ...state.totalsByDate, [date]: total }
-    }))
-}));
-
+export { fetchPersonalDaySummary };
