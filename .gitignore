@@ -33,3 +33,5 @@ build/
 # Other
 .npm/
 .eslintcache
+# Test coverage output
+coverage/
