@@ -19,48 +19,6 @@ interface ButtonProps {
   loading?: boolean;
 }
 
-export const Button: React.FC<ButtonProps> = ({
-  title,
-  onPress,
-  variant = 'primary',
-  disabled,
-  loading
-}) => {
-  const theme = useTheme();
-  const isPrimary = variant === 'primary';
-
-  return (
-    <TouchableOpacity
-      style={[
-        styles.button,
-        {
-          backgroundColor: isPrimary ? theme.colors.primary : 'transparent',
-          borderColor: theme.colors.primary,
-          opacity: disabled || loading ? 0.6 : 1
-        }
-      ]}
-      onPress={onPress}
-      disabled={disabled || loading}
-      activeOpacity={0.85}
-    >
-      {loading ? (
-        <ActivityIndicator color={isPrimary ? '#000' : theme.colors.primary} />
-      ) : (
-        <Text
-          style={[
-            styles.buttonText,
-            {
-              color: isPrimary ? '#000' : theme.colors.primary
-            }
-          ]}
-        >
-          {title}
-        </Text>
-      )}
-    </TouchableOpacity>
-  );
-};
-
 interface TextFieldProps {
   label: string;
   value: string;
@@ -76,43 +34,6 @@ interface TextFieldProps {
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
   editable?: boolean;
 }
-
-export const TextField: React.FC<TextFieldProps> = ({
-  label,
-  value,
-  onChangeText,
-  secureTextEntry,
-  keyboardType = 'default',
-  placeholder,
-  autoCapitalize,
-  editable = true
-}) => {
-  const theme = useTheme();
-  return (
-    <View style={styles.fieldContainer}>
-      <Text style={[styles.fieldLabel, { color: theme.colors.textSecondary }]}>{label}</Text>
-      <TextInput
-        style={[
-          styles.input,
-          {
-            backgroundColor: editable ? theme.colors.surface : theme.colors.background,
-            color: theme.colors.textPrimary,
-            borderColor: theme.colors.border,
-            opacity: editable ? 1 : 0.7
-          }
-        ]}
-        value={value}
-        onChangeText={onChangeText}
-        secureTextEntry={secureTextEntry}
-        keyboardType={keyboardType}
-        placeholder={placeholder}
-        autoCapitalize={autoCapitalize}
-        placeholderTextColor={theme.colors.textSecondary}
-        editable={editable}
-      />
-    </View>
-  );
-};
 
 export const ScreenContainer: React.FC<{ children: React.ReactNode; scrollable?: boolean }> = ({
   children,
