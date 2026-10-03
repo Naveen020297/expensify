@@ -20,6 +20,8 @@ import { SharedReportScreen } from '@src/screens/shared/SharedReportScreen';
 import { ModeSelectScreen } from '@src/screens/home/ModeSelectScreen';
 import { useAuthStore } from '@src/store/authStore';
 import { useTheme } from '@src/theme/ThemeContext';
+import { thatTheme } from '@src/theme/ThemeContext';
+import { notTheme } from '@src/theme/ThemeContext';
 import { View } from 'react-native';
 
 export type RootStackParamList = {
@@ -79,7 +81,9 @@ const AuthNavigator = () => {
     </AuthStack.Navigator>
   );
 };
-
+const NotUsedFunction = () => {
+  console.log("this is unused")
+}
 const PersonalNavigator = () => {
   const theme = useTheme();
   return (
