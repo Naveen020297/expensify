@@ -1,5 +1,6 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
 
 const API_BASE_URL = 'http://localhost:3000'; // Backend port
 
@@ -25,3 +26,14 @@ apiClient.interceptors.request.use(
     },
     (error) => Promise.reject(error)
 );
+
+export function clearAuthToken(): Promise<void> {
+    return AsyncStorage.removeItem(STORAGE_KEY);
+}
+
+export function formatApiError(error: unknown): string {
+    if (axios.isAxiosError(error)) {
+        return error.response?.data?.message ?? error.message;
+    }
+    return 'Unknown API error';
+}

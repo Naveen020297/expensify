@@ -195,3 +195,11 @@ const styles = StyleSheet.create({
   }
 });
 
+export function formatCurrencyLabel(amount: number, currencyCode: string = 'USD'): string {
+  return `${currencyCode} ${amount.toFixed(2)}`;
+}
+
+export const EmptyStateIcon: React.FC<{ size?: number }> = ({ size = 48 }) => (
+  <View style={{ width: size, height: size }} />
+);
+

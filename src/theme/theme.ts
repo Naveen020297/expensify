@@ -55,3 +55,14 @@ export const theme = {
 
 export type AppTheme = typeof theme;
 
+export const legacyColors = {
+  accent: '#00ffcc',
+  muted: '#888888'
+};
+
+export function getSpacingScale(multiplier: number) {
+  return Object.fromEntries(
+    Object.entries(spacing).map(([key, value]) => [key, value * multiplier])
+  );
+}
+

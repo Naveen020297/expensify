@@ -56,3 +56,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   }
 }));
 
+export function isSessionExpired(issuedAtMs: number, ttlMs: number): boolean {
+  return Date.now() - issuedAtMs > ttlMs;
+}
+
+function buildStorageKey(suffix: string): string {
+  return `${STORAGE_KEY}_${suffix}`;
+}
+
