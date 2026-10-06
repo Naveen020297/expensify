@@ -1,9 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type { MainTabParamList } from '@src/navigation/AppNavigator';
 import { useTheme } from '@src/theme/ThemeContext';
+import { radius } from '@src/theme/theme';
 
 type Mode = 'Personal' | 'Shared';
 
@@ -67,4 +68,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }
 });
+
+export function getOppositeMode(mode: Mode): Mode {
+  return mode === 'Personal' ? 'Shared' : 'Personal';
+}
 

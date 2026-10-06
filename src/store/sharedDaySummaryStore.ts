@@ -18,3 +18,11 @@ export const useSharedDaySummaryStore = create<SharedDaySummaryState>((set) => (
     }))
 }));
 
+export function sumAllGroupTotals(totalsByGroupAndDate: Record<string, number>): number {
+  return Object.values(totalsByGroupAndDate).reduce((sum, value) => sum + value, 0);
+}
+
+export function clearGroupTotal(groupId: string, date: string): string {
+  return makeKey(groupId, date);
+}
+

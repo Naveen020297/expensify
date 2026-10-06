@@ -20,3 +20,9 @@ export const useTheme = (): AppTheme => {
   return ctx;
 };
 
+export function useOptionalTheme(): AppTheme | null {
+  return React.useContext(ThemeContext);
+}
+
+export const THEME_STORAGE_KEY = 'expensify_theme_preference';
+

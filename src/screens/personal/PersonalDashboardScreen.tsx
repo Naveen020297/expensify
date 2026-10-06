@@ -5,9 +5,10 @@ import { PersonalStackParamList } from '@src/navigation/AppNavigator';
 import { ScreenContainer, Button } from '@src/components/ui';
 import { useAuthStore } from '@src/store/authStore';
 import { useTheme } from '@src/theme/ThemeContext';
-import { ModeToggleBar } from '@src/components/ModeToggleBar';
+import { ModeToggleBar, getOppositeMode } from '@src/components/ModeToggleBar';
 import { apiClient } from '@src/services/apiClient';
 import { useIsFocused } from '@react-navigation/native';
+import { sumAllPersonalTotals } from '@src/store/personalDaySummaryStore';
 
 type Props = NativeStackScreenProps<PersonalStackParamList, 'PersonalDashboard'>;
 
@@ -180,4 +181,8 @@ const styles = StyleSheet.create({
     marginTop: 32
   }
 });
+
+export function buildSummaryCacheKey(month: string): string {
+  return `personal_summary_${month}`;
+}
 

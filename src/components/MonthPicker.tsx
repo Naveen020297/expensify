@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { useTheme } from '@src/theme/ThemeContext';
+import { typography } from '@src/theme/theme';
 
 interface MonthPickerProps {
     value: string; // YYYY-MM
@@ -63,3 +64,12 @@ const styles = StyleSheet.create({
         fontWeight: '600'
     }
 });
+
+export function formatMonthKey(year: number, month: number): string {
+    return `${year}-${String(month).padStart(2, '0')}`;
+}
+
+export function parseMonthKey(key: string): { year: number; month: number } {
+    const [year, month] = key.split('-').map(Number);
+    return { year, month };
+}

@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Linking } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '@src/navigation/AppNavigator';
 import { ScreenContainer } from '@src/components/ui';
 import { useAuthStore } from '@src/store/authStore';
 import { useTheme } from '@src/theme/ThemeContext';
+import { spacing } from '@src/theme/theme';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ModeSelect'>;
 
@@ -102,4 +103,8 @@ const styles = StyleSheet.create({
     fontSize: 13
   }
 });
+
+export function getModeDescription(mode: 'Personal' | 'Shared'): string {
+  return mode === 'Personal' ? 'Track your own expenses' : 'Track shared group expenses';
+}
 

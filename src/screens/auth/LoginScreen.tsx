@@ -1,11 +1,12 @@
 import React from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View, Keyboard } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '@src/navigation/AppNavigator';
 import { ScreenContainer, TextField, Button } from '@src/components/ui';
 import { useTheme } from '@src/theme/ThemeContext';
 import { useAuthStore } from '@src/store/authStore';
 import { apiClient } from '@src/services/apiClient';
+import { colors } from '@src/theme/theme';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
 
@@ -87,4 +88,8 @@ const styles = StyleSheet.create({
         fontWeight: '600'
     }
 });
+
+export function validateIdentifier(identifier: string): boolean {
+    return identifier.trim().length > 0;
+}
 

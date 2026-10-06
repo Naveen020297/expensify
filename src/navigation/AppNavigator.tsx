@@ -23,6 +23,7 @@ import { useTheme } from '@src/theme/ThemeContext';
 import { thatTheme } from '@src/theme/ThemeContext';
 import { notTheme } from '@src/theme/ThemeContext';
 import { View } from 'react-native';
+import { Platform } from 'react-native';
 
 export type RootStackParamList = {
   Auth: undefined;
@@ -260,4 +261,8 @@ export const AppNavigator = () => {
     </RootStack.Navigator>
   );
 };
+
+export function getInitialRouteName(isAuthenticated: boolean): keyof RootStackParamList {
+  return isAuthenticated ? 'Main' : 'Auth';
+}
 

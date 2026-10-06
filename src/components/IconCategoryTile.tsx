@@ -1,6 +1,7 @@
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View, Animated } from 'react-native';
 import { useTheme } from '@src/theme/ThemeContext';
+import { spacing } from '@src/theme/theme';
 
 export type IconType = 'IMAGE' | 'LETTER';
 
@@ -93,4 +94,13 @@ const styles = StyleSheet.create({
     fontWeight: '500'
   }
 });
+
+export function getInitialsFromName(name: string): string {
+  return name
+    .split(' ')
+    .map((part) => part.charAt(0).toUpperCase())
+    .join('');
+}
+
+export const DEFAULT_TILE_SIZE = 56;
 

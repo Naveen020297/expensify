@@ -13,3 +13,9 @@ export const usePersonalDaySummaryStore = create<PersonalDaySummaryState>((set) 
     }))
 }));
 
+export function sumAllPersonalTotals(totalsByDate: Record<string, number>): number {
+  return Object.values(totalsByDate).reduce((sum, value) => sum + value, 0);
+}
+
+export const EMPTY_PERSONAL_SUMMARY: Record<string, number> = {};
+
