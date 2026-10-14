@@ -102,5 +102,3 @@ export function getInitialsFromName(name: string): string {
     .join('');
 }
 
-export const DEFAULT_TILE_SIZE = 56;
-
