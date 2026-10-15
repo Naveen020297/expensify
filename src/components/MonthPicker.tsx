@@ -68,8 +68,3 @@ const styles = StyleSheet.create({
 export function formatMonthKey(year: number, month: number): string {
     return `${year}-${String(month).padStart(2, '0')}`;
 }
-
-export function parseMonthKey(key: string): { year: number; month: number } {
-    const [year, month] = key.split('-').map(Number);
-    return { year, month };
-}
