@@ -1,0 +1,65 @@
+name: DCA
+on:
+  workflow_dispatch:        # only trigger: the Run workflow button
+
+concurrency:
+  group: dca-${{ github.ref }}
+
+permissions:
+  contents: read
+
+jobs:
+  dca:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      IMAGE: ghcr.io/goai-technologies/dca-runner:trial
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies (so the engines can resolve imports)
+        run: npm ci --ignore-scripts
+
+      - name: Pull DCA engine (private image from goai-technologies)
+        run: |
+          echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GHCR_USER }}" --password-stdin
+          docker pull "$IMAGE"
+
+      - name: DCA analyze (static only)
+        run: |
+          mkdir -p dca-out
+          docker run --rm \
+            --user "$(id -u):$(id -g)" -e HOME=/tmp \
+            -v "$GITHUB_WORKSPACE:/workspace" \
+            "$IMAGE" \
+            node /opt/dcav2/dist/standalone-cli.js analyze /workspace \
+              --format json --output /workspace/dca-out/report.json \
+              --fallow-bin /opt/dcav2/node_modules/.bin/fallow \
+              --commit-sha "$GITHUB_SHA"
+
+      - name: Job summary
+        if: always()
+        run: |
+          echo "## DCA (static only)" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f dca-out/report.json ]; then
+            echo '```json' >> "$GITHUB_STEP_SUMMARY"
+            jq '.summary // {}' dca-out/report.json >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No report produced, see the analyze step log." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Log out of GHCR
+        if: always()
+        run: docker logout ghcr.io
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dca-report
+          path: dca-out/
+          retention-days: 90
