@@ -38,6 +38,8 @@ jobs:
             "$IMAGE" \
             node /opt/dcav2/dist/standalone-cli.js analyze /workspace \
               --format json --output /workspace/dca-out/report.json \
+              --html /workspace/dca-out/scorecard.html \
+              --repository "$GITHUB_REPOSITORY" \
               --fallow-bin /opt/dcav2/node_modules/.bin/fallow \
               --commit-sha "$GITHUB_SHA"
 
