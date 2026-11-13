@@ -29,7 +29,7 @@ jobs:
             -e DCA_ENTITLEMENT_API \
             -e ACTIONS_ID_TOKEN_REQUEST_URL \
             -e ACTIONS_ID_TOKEN_REQUEST_TOKEN \
-            ghcr.io/goai-technologies/dca-runner:trial \
+            ghcr.io/goai-technologies/dca-runner:the-one \
             node /opt/dcav2/dist/standalone-cli.js analyze /workspace \
               --format json --output /out/report.json \
               --fallow-bin /opt/dcav2/node_modules/.bin/fallow
