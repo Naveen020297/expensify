@@ -21,7 +21,7 @@ jobs:
           password: ${{ secrets.DCA_REGISTRY_TOKEN }}
       - name: Run DCA
         env:
-          DCA_ENTITLEMENT_API: ${{ secrets.DCA_ENTITLEMENT_API }}
+          DCA_ENTITLEMENT_API: ${{ vars.DCA_ENTITLEMENT_API }}
         run: |
           mkdir -p dca-out && chmod 777 dca-out
           docker run --rm \
@@ -29,7 +29,7 @@ jobs:
             -e DCA_ENTITLEMENT_API \
             -e ACTIONS_ID_TOKEN_REQUEST_URL \
             -e ACTIONS_ID_TOKEN_REQUEST_TOKEN \
-            ghcr.io/goai-technologies/dca-runner:trial \
+            ghcr.io/goai-technologies/dca-runner:naveen020297 \
             node /opt/dcav2/dist/standalone-cli.js analyze /workspace \
               --format json --output /out/report.json \
               --fallow-bin /opt/dcav2/node_modules/.bin/fallow
