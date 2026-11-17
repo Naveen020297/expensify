@@ -1,38 +1,57 @@
 name: DCA
+
 on:
   workflow_dispatch: {}
+
 permissions:
   contents: read      # checkout
-  id-token: write     # proves this run to goAI via GitHub OIDC
+  id-token: write     # lets the engine prove this run to goAI via GitHub OIDC
+
 concurrency:
   group: dca-${{ github.ref }}
   cancel-in-progress: false
+
 jobs:
   analyze:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
-        with: { persist-credentials: false }
-      - uses: docker/login-action@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Log in to the goAI image registry
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.DCA_REGISTRY_TOKEN }}
+
       - name: Run DCA
         env:
-          DCA_ENTITLEMENT_API: ${{ secrets.DCA_ENTITLEMENT_API }}
+          DCA_ENTITLEMENT_API: ${{ vars.DCA_ENTITLEMENT_API }}
         run: |
           mkdir -p dca-out && chmod 777 dca-out
           docker run --rm \
-            -v "$PWD:/workspace:ro" -v "$PWD/dca-out:/out" \
+            -v "$PWD:/workspace:ro" \
+            -v "$PWD/dca-out:/out" \
             -e DCA_ENTITLEMENT_API \
             -e ACTIONS_ID_TOKEN_REQUEST_URL \
             -e ACTIONS_ID_TOKEN_REQUEST_TOKEN \
             ghcr.io/goai-technologies/dca-runner:naveen020297 \
             node /opt/dcav2/dist/standalone-cli.js analyze /workspace \
-              --format json --output /out/report.json \
+              --format json \
+              --output /out/report.json \
+              --html /out/report.html \
+              --repository "${{ github.repository }}" \
               --fallow-bin /opt/dcav2/node_modules/.bin/fallow
-      - uses: actions/upload-artifact@v4
+
+      - name: Upload report
         if: always()
-        with: { name: dca-report, path: dca-out/, retention-days: 30 }
+        uses: actions/upload-artifact@v4
+        with:
+          name: dca-report
+          path: dca-out/
+          if-no-files-found: warn
+          retention-days: 30
